@@ -1,0 +1,2 @@
+# BC1_Spare1
+THUASMinorBlockchain_20192020B_IT repository for Spare1
