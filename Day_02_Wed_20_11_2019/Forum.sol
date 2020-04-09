@@ -35,7 +35,7 @@ contract Forum {
     participantReputation[_participant] -= _reputation;
   }
 
-  function addBounty(string memory _question) payable public {
+  function addBounty(string memory _question) public payable {
     questionBounty[_question] = msg.value;
   }
 
