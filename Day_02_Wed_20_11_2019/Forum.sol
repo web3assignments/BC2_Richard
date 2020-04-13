@@ -1,16 +1,36 @@
 pragma solidity 0.5.12;
 
 contract Forum {
+
+  struct Thread {
+    uint256 id;
+    address owner;
+    string question;
+    int32 score;
+    uint256 answerCount;
+  }
+
+  struct Answer {
+    address owner;
+    string answer;
+    int32 score;
+    bool accepted;
+  }
+
   address public owner;
-  mapping (address => bool) public operators;
+  uint256 public threadCount;
+  mapping (uint256 => Thread) public threads;
+  mapping (uint256 => mapping (uint256 => Answer)) public threadAnswers;
   mapping (address => int32) public participantReputation;
-  mapping (string => uint256) public questionBounty;
+  // mapping (string => uint256) public questionBounty;
+  // mapping (address => bool) public operators;
 
   event answerAccepted(string answer);
+  event threadUpdated(uint256 threadId);
 
   constructor () public {
     owner = msg.sender;
-    operators[owner] = true;
+    // operators[owner] = true;
   }
 
   modifier onlyOwner() {
@@ -18,48 +38,71 @@ contract Forum {
     _;
   }
 
-  modifier onlyOperator() {
-    require(!operators[msg.sender], "Must be an operator to perform this action");
-    _;
-  }
-
   function destroy() public onlyOwner {
     selfdestruct(msg.sender);
   }
 
-  function upVote(address _participant, uint16 _reputation) public {
-    participantReputation[_participant] += _reputation;
+  function startThread(string memory _question) public {
+    threads[threadCount] = Thread(threadCount, msg.sender, _question, 0, 0);
+    emit threadUpdated(threadCount);
+    threadCount++;
   }
 
-  function downVote(address _participant, uint16 _reputation) public {
-    participantReputation[_participant] -= _reputation;
+  function addAnswer(uint256 _threadId, string memory _answer) public {
+    Answer memory answer = Answer(msg.sender, _answer, 0, false);
+    Thread storage thread = threads[_threadId];
+    threadAnswers[_threadId][thread.answerCount] = answer;
+    thread.answerCount++;
+    emit threadUpdated(_threadId);
   }
 
-  function addBounty(string memory _question) public payable {
-    questionBounty[_question] = msg.value;
+  function vote(uint256 _threadId, uint256 _answerId, int32 _points) public {
+    require(_points != 0, "Points must not be 0");
+    if (_answerId < 0) {
+      voteAnswer(_threadId, _answerId, _points);
+    } else {
+      voteThread(_threadId, _points);
+    }
+    emit threadUpdated(_threadId);
   }
 
-  function acceptAnswer(address _participant, string memory _question, string memory _answer) public {
-    upVote(_participant, 10);
-    emit answerAccepted(_answer);
-    address(uint160(_participant)).transfer(questionBounty[_question]);
+  function voteAnswer(uint256 _threadId, uint256 _answerId, int32 _points) private {
+    Answer storage answer = threadAnswers[_threadId][_answerId];
+    answer.score += _points;
+    participantReputation[answer.owner] += _points;
   }
 
-  function kick(address _participant) public onlyOperator {
-    participantReputation[_participant] = 0;
+  function voteThread(uint256 _threadId, int32 _points) private {
+    Thread storage thread = threads[_threadId];
+    thread.score += _points;
+    participantReputation[thread.owner] += _points;
   }
 
-  function addOperator(address _participant) public onlyOwner {
-    operators[_participant] = true;
+  function acceptAnswer(uint256 _threadId, uint256 _answerId, int32 _points) public {
+    threadAnswers[_threadId][_answerId].accepted = true;
+    vote(_threadId, _answerId, _points);
   }
 
-  function removeOperator(address _participant) public onlyOwner {
-    operators[_participant] = false;
-  }
+  // modifier onlyOperator() {
+  //   require(!operators[msg.sender], "Must be an operator to perform this action");
+  //   _;
+  // }
 
-  function changeOwner(address _newOwner) public onlyOwner {
-    operators[owner] = false;
-    owner = _newOwner;
-    operators[_newOwner] = true;
-  }
+  // function kick(address _participant) public onlyOperator {
+  //   participantReputation[_participant] = 0;
+  // }
+
+  // function addOperator(address _participant) public onlyOwner {
+  //   operators[_participant] = true;
+  // }
+
+  // function removeOperator(address _participant) public onlyOwner {
+  //   operators[_participant] = false;
+  // }
+
+  // function changeOwner(address _newOwner) public onlyOwner {
+  //   operators[owner] = false;
+  //   owner = _newOwner;
+  //   operators[_newOwner] = true;
+  // }
 }
