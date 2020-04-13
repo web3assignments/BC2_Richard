@@ -2,5 +2,5 @@
 Place the assignments in this subdirectory   
 
 ### Metamask mobile
-** The metamask mobile assignment is missing **
+**The metamask mobile assignment is missing** /n
 This is because the iOS beta of metamask is currently full.
