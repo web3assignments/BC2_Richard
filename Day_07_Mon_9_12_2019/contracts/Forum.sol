@@ -22,12 +22,15 @@ contract Forum {
   mapping (uint256 => Thread) public threads;
   mapping (uint256 => mapping (uint256 => Answer)) public threadAnswers;
   mapping (address => int32) public participantReputation;
+  // mapping (string => uint256) public questionBounty;
+  // mapping (address => bool) public operators;
 
   event answerAccepted(string answer);
   event threadUpdated(uint256 threadId);
 
   constructor () public {
     owner = msg.sender;
+    // operators[owner] = true;
   }
 
   modifier onlyOwner() {
@@ -79,4 +82,27 @@ contract Forum {
     threadAnswers[_threadId][_answerId].accepted = true;
     vote(_threadId, _answerId, _points);
   }
+
+  // modifier onlyOperator() {
+  //   require(!operators[msg.sender], "Must be an operator to perform this action");
+  //   _;
+  // }
+
+  // function kick(address _participant) public onlyOperator {
+  //   participantReputation[_participant] = 0;
+  // }
+
+  // function addOperator(address _participant) public onlyOwner {
+  //   operators[_participant] = true;
+  // }
+
+  // function removeOperator(address _participant) public onlyOwner {
+  //   operators[_participant] = false;
+  // }
+
+  // function changeOwner(address _newOwner) public onlyOwner {
+  //   operators[owner] = false;
+  //   owner = _newOwner;
+  //   operators[_newOwner] = true;
+  // }
 }
