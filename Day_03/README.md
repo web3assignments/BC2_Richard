@@ -6,4 +6,4 @@ While doing this assignment I used docker to run Prometheus
 If you do this make sure you change localhost in the .yml file to
 - docker.for.mac.localhost
 - docker.for.windows.localhost
-in order for it to reach the right address   
+In order for it to reach the right address   
