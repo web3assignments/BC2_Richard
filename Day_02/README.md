@@ -1,2 +1,2 @@
-### Day_12_Wed_8_1_2020 
+### Day_02
 Place the assignments in this subdirectory   
