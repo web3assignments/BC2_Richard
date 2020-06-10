@@ -1,0 +1,31 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple IPFS app</title>
+  <script src="https://unpkg.com/ipfs/dist/index.min.js"></script>
+  <script src="https://bundle.run/buffer"></script>
+</head>
+
+<body>
+  <h1>Hello simple ipfs app</h1>
+  <p>Hier komt de ipfs app</p>
+
+  <p>
+    <label>Kies bestand om te uploaden naar IPFS:
+      <input type="file" id="fileInput" />
+      <button onclick="addFile()">Uploaden naar IPFS</button>
+    </label>
+  </p>
+  <p>
+    <label>Voer hash in om IPFS file op te halen:
+      <input type="text" id="ipfsHashInput" />
+      <button onclick="search()">Zoek</button>
+    </label>
+  </p>
+  <div id="log" style="width: 100%; height: 200px;"></div>
+  <script src="script.js"></script>
+</body>
+
+</html>
