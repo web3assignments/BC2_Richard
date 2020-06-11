@@ -54,7 +54,7 @@ contract Proxy is Ownable {
 
     receive() external payable {
         (bool success, ) = contractAddress.call(
-            abi.encodeWithSignature("destroy()")
+            abi.encodeWithSignature("receive()")
         );
         require(success, "function not executed successfully");
     }
