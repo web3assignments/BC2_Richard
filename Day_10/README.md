@@ -1,5 +1,6 @@
 ### Day_10
 
-Place the assignments in this subdirectory
+## IPFS links
 
-## https://ipfs.io/ipfs/QmaCUCSXkJYo4K21UPt6DJSXPJpM4wU9ShMXuJQNa38qwU/
+[ipfs]https://ipfs.io/ipfs/QmaCUCSXkJYo4K21UPt6DJSXPJpM4wU9ShMXuJQNa38qwU/
+[dnsLink]ifps://richardkerkvliet.nl
