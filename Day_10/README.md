@@ -2,8 +2,8 @@
 
 ## IPFS links
 
-# ipfs
+### ipfs
 [ipfs](https://ipfs.io/ipfs/QmaCUCSXkJYo4K21UPt6DJSXPJpM4wU9ShMXuJQNa38qwU/)
 
-# dns
+### dns
 ifps://richardkerkvliet.nl
