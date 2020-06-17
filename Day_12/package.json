@@ -1,0 +1,17 @@
+{
+  "name": "day_12",
+  "version": "1.0.0",
+  "description": "Place the assignments in this subdirectory",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "truffle-assertions": "^0.9.2"
+  }
+}
