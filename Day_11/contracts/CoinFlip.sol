@@ -1,7 +1,8 @@
 pragma solidity ^0.6.0;
 
-import "github.com/provable-things/ethereum-api/provableAPI_0.6.sol";
-import "github.com/OpenZeppelin/openzeppelin-contracts/contracts/math/SafeMath.sol";
+import "./provableAPI_0.6.sol";
+// import "github.com/OpenZeppelin/openzeppelin-contracts/contracts/math/SafeMath.sol";
+import "../node_modules/@openzeppelin/contracts/math/SafeMath.sol";
 import "./Mortal.sol";
 import "./RoleControlled.sol";
 
