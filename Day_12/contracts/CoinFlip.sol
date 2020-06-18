@@ -50,7 +50,7 @@ contract CoinFlip is usingProvable, RoleControlled, Mortal {
 
     constructor() public payable {}
 
-    receive() external payable {}
+    receive () external payable {}
 
     fallback() external payable {}
 
