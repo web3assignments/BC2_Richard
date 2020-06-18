@@ -3,7 +3,7 @@ pragma solidity ^0.6.0;
 import "./Ownable.sol";
 
 contract Mortal is Ownable {
-    event deleteEvent(address contracAddress);
+    event deleteEvent(address contractAddress);
 
     function destroy() public payable onlyOwner {
         emit deleteEvent(address(this));

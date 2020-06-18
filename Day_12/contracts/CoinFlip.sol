@@ -14,12 +14,12 @@ contract CoinFlip is usingProvable, RoleControlled, Mortal {
         uint256 bet;
     }
 
-    mapping(bytes32 => Game) private pendingGames;
+    mapping(bytes32 => Game) public pendingGames;
     mapping(address => uint256) private playerLosses;
     mapping(address => uint256) private playerWinings;
 
-    event Result(bool winner, uint256 winnings);
-    event LogNewProvableQuery(string description);
+    event Result(bool winner, uint256 winnings, uint8 result);
+    event LogNewProvableQuery(bytes32 queryId);
 
     modifier minimumBet(uint256 bet) {
         require(msg.value >= bet, "Minimum bet not reached");
@@ -27,7 +27,7 @@ contract CoinFlip is usingProvable, RoleControlled, Mortal {
     }
 
     modifier allowedChoices(uint8 _choice) {
-        require(_choice == 0 || _choice == 1, "Choice must either be 1 or 0");
+        require(_choice == 0 || _choice == 1, "Choice must either be 0 or 1");
         _;
     }
 
@@ -38,25 +38,22 @@ contract CoinFlip is usingProvable, RoleControlled, Mortal {
     receive() external payable {}
 
     function flip(uint8 _choice) public payable minimumBet(0.2 ether) allowedChoices(_choice) minimumRole(Roles.FREE) {
-        require(
-            msg.value * 2 <= address(this).balance,
-            "Contract can't pay out that kind of money right now"
-        );
-
-        bytes32 queryId = provable_newRandomDSQuery(0, 1, 2000000);
-        emit LogNewProvableQuery("genereated query");
+        require(msg.value <= address(this).balance, "Contract can't pay out that kind of money right now");
+        // bytes32 queryId = provable_newRandomDSQuery(0, 1, 2000000);
+        bytes32 queryId = bytes32(keccak256("test"));
+        emit LogNewProvableQuery(queryId);
         pendingGames[queryId] = Game(msg.sender, _choice, msg.value);
     }
 
-    function getMyLosses() public minimumRole(Roles.USER) returns (uint256 losses) {
+    function getMyLosses() public minimumRole(Roles.USER) returns(uint256) {
         return playerLosses[msg.sender];
     }
 
-    function getMyWinings() public minimumRole(Roles.USER) returns (uint256 winings) {
+    function getMyWinings() public minimumRole(Roles.USER) returns(uint256) {
         return playerWinings[msg.sender];
     }
 
-    function resetPlayer(address _player) public minimumRole(Roles.ADMIN) returns (bool success){
+    function resetPlayer(address _player) public minimumRole(Roles.ADMIN) returns (bool){
         delete playerLosses[_player];
         delete playerWinings[_player];
         delete userRoles[_player];
@@ -71,7 +68,7 @@ contract CoinFlip is usingProvable, RoleControlled, Mortal {
         public
         override
     {
-        require(msg.sender == provable_cbAddress());
+        // require(msg.sender == provable_cbAddress());
         uint8 result = uint8(uint256(keccak256(abi.encodePacked(_result))) % 2);
         Game memory game = pendingGames[_queryId];
         bool playerWon = (game.choice == result);
@@ -84,6 +81,6 @@ contract CoinFlip is usingProvable, RoleControlled, Mortal {
             playerLosses[game.player].add(game.bet);
         }
         delete pendingGames[_queryId];
-        emit Result(playerWon, winnings);
+        emit Result(playerWon, winnings, result);
     }
 }
