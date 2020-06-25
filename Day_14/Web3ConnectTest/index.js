@@ -2,6 +2,9 @@ const Web3 = require("web3");
 const Web3Modal = require("web3modal");
 const WalletConnect = require("@walletconnect/web3-provider").default;
 
+const fs = require('fs');
+const infuraKey = fs.readFileSync(".infura").toString().trim();
+
 var provider;
 
 function log(logstr) {
@@ -12,7 +15,7 @@ const providerOptions = {
   walletconnect: {
     package: WalletConnect, // required
     options: {
-      infuraId: "37a4c5643fe0470c944325f1e9e12d50" // required
+      infuraId: infuraKey // required
     }
   }
 };
