@@ -1,0 +1,18 @@
+{
+  "name": "Site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "browserify index.js -o bundle.js",
+    "watch": "watchify index.js -o bundle.js -v"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@walletconnect/web3-provider": "1.0.5",
+    "web3": "^1.2.9",
+    "web3modal": "^1.7.0"
+  }
+}
