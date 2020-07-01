@@ -28,7 +28,7 @@ contract CoinFlip is usingProvable, RoleControlled, Mortal {
     /// @author Richard Kerkvliet
     /// @notice The result of a game
     /// @dev Emitted when the result of the game is in
-    event Result(bool winner, uint256 winnings, uint8 result);
+    event Result(bool winner, uint256 winnings, uint8 result, address player);
     /// @author Richard Kerkvliet
     /// @notice The firing of a new provable query
     /// @dev Emitted when a new query is send to provable
@@ -60,8 +60,8 @@ contract CoinFlip is usingProvable, RoleControlled, Mortal {
     /// @param _choice a uint either 0 or 1
     function flip(uint8 _choice) public payable minimumBet(0.2 ether) allowedChoices(_choice) minimumRole(Roles.FREE) {
         require(msg.value <= address(this).balance, "Contract can't pay out that kind of money right now");
-        // bytes32 queryId = provable_newRandomDSQuery(0, 1, 2000000);
-        bytes32 queryId = bytes32(keccak256("test"));
+        bytes32 queryId = provable_newRandomDSQuery(0, 1, 2000000);
+        // bytes32 queryId = bytes32(keccak256("test"));
         emit LogNewProvableQuery(queryId);
         pendingGames[queryId] = Game(msg.sender, _choice, msg.value);
     }
@@ -101,7 +101,7 @@ contract CoinFlip is usingProvable, RoleControlled, Mortal {
         public
         override
     {
-        // require(msg.sender == provable_cbAddress());
+        require(msg.sender == provable_cbAddress());
         uint8 result = uint8(uint256(keccak256(abi.encodePacked(_result))) % 2);
         Game memory game = pendingGames[_queryId];
         bool playerWon = (game.choice == result);
@@ -109,11 +109,11 @@ contract CoinFlip is usingProvable, RoleControlled, Mortal {
         if (playerWon) {
             winnings = game.bet * 2;
             game.player.transfer(winnings);
-            playerWinings[game.player].add(game.bet);
+            playerWinings[game.player] += game.bet;
         } else {
-            playerLosses[game.player].add(game.bet);
+            playerLosses[game.player] += game.bet;
         }
         delete pendingGames[_queryId];
-        emit Result(playerWon, winnings, result);
+        emit Result(playerWon, winnings, result, game.player);
     }
 }

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Hello modal</title>
+    <title>Coin flip dApp</title>
+    <script src="abi.js"></script>
   </head>
   <body>
     <h1>Coinflip dApp</h1>
@@ -12,16 +13,13 @@
 
     <div id="connected" style="display: none;">
       <h3 id="signed-in-header"></h3>
-      <div id="scores">
-        <h2 id="winnings">You won: 1</h2>
-        <h2 id="losses">You lost: 2</h2>
-      </div>
+
       <div id="flip">
         <form>
-          <label>Bet: <input type="text"> ETH</label><br><br>
-          <label>Heads<input type="radio" name="side" value="0"></label>
+          <label>Bet: <input type="number" id="bet"> ETH</label><br><br>
+          <label>Heads<input type="radio" name="side" value="0" checked></label>
           <label>Tails<input type="radio" name="side" value="1"></label> <br><br>
-          <button type="button">bet</button>
+          <button type="button" id="start-game">bet</button>
         </form>
       </div>
     </div>
